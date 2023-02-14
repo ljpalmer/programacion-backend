@@ -1,6 +1,5 @@
 import Product from "./Product.js";
 
-
 export default class ProductManager{    
     constructor(path, persistenceManager, file_name) {
         this._products = [];
@@ -19,7 +18,9 @@ export default class ProductManager{
             console.log('[SYSTEM] Carpeta ya se encuentra creada');
         }      
     }
-    addProduct(product) {        
+    async addProduct(product) {         
+        this._products = await this._persistenceManager.fncReadFromPersistence(this._path,this._file_name);
+        product.id = -1;
         if (!this.fncValidateCodeProductExist(product.code)) {
             if (this.fncValidateAllValuesIncluded(product)) {
                 // product.id = this._products.length + 1;
@@ -35,6 +36,7 @@ export default class ProductManager{
         } else {
             console.log("[SYSTEM] No se pudo agregar el producto, campo [Code] Repetido.");
         }
+        return product.id;
     };
 
     async getProducts() {        
@@ -53,8 +55,8 @@ export default class ProductManager{
 
     async getProductById(id) {        
         this._products = await this._persistenceManager.fncReadFromPersistence(this._path,this._file_name);
-        let rpta = new Product('','',0,'','',0);
-        console.log(this._products);
+
+        let rpta = new Product('','',0,'','',0);        
         let productPosition = this._products.findIndex(x => x.id == id);
         console.log(`[SYSTEM] Posición de la búsqueda: ${productPosition}`);
         if (productPosition >= 0) {
@@ -66,8 +68,10 @@ export default class ProductManager{
         return rpta;
     };
 
-    updateProductById(id, product){
+    updateProductById(id, product){        
         this._products = this._persistenceManager.fncReadFromPersistence(this._path,this._file_name);
+
+        let success = false;
 
         let productPosition = this._products.findIndex(x => x.id == id);
         if (productPosition >= 0) {
@@ -79,17 +83,18 @@ export default class ProductManager{
             this._products[productPosition].code = product.code;
             this._products[productPosition].stock = product.stock;
             //Persistimos los datos
-            let success = this._persistenceManager.fncWritePersistence(this._path, this._file_name, this._products);   
+            success = this._persistenceManager.fncWritePersistence(this._path, this._file_name, this._products);   
             (success == true) ? console.log('[SYSTEM] Se guardo correctamente') : console.log('[SYSTEM] Problemas al guardar');
-        }else{
-            //no se puede actualizar
+        }else{            
             console.log("[SYSTEM] Producto no encontrado, no se pudo actualizar.");
         }
+        return success;
     }
 
-    generateIdForProduct(){
-        let id = 0;        
+    generateIdForProduct(){           
         this._products = this._persistenceManager.fncReadFromPersistence(this._path,this._file_name);
+
+        let id = 0;     
         if(this._products.length == 0){
             id = 1;
         }else{
@@ -98,16 +103,19 @@ export default class ProductManager{
         return id;
     }
 
-    deleteProductById(id){
+    async deleteProductById(id){        
         this._products = this._persistenceManager.fncReadFromPersistence(this._path,this._file_name);
+
+        let success = false;
         let productPosition = this._products.findIndex(x => x.id == id);
         if (productPosition >= 0) {
             this._products.splice(productPosition, 1);
-            let success = this._persistenceManager.fncWritePersistence(this._path, this._file_name, this._products);   
+            success = await this._persistenceManager.fncWritePersistence(this._path, this._file_name, this._products);   
             (success == true) ? console.log('[SYSTEM] Se elimino correctamente') : console.log('[SYSTEM] Problemas al guardar la eliminacion');
         }else{
             console.log("[SYSTEM] Producto no encontrado, no se pudo eliminar.");
         }
+        return success;
     }
 
     numberRecords(){
@@ -116,23 +124,23 @@ export default class ProductManager{
     }
 
     fncValidateCodeProductExist(code) {
-        let keyFunction = false;
+        let codeIsFound = false;
         this._products.forEach(product => {
                 if (product.code === code) {
-                    keyFunction=true;
+                    codeIsFound=true;
                 }
             });
-        return keyFunction;
+        return codeIsFound;
     }
 
     fncValidateAllValuesIncluded(product) {
-        let keyFunction = true;
+        let valueInclude = true;
         let values = Object.values(product);
         values.forEach(element => {
             if (typeof element === 'undefined') {
-                keyFunction = false;
+                valueInclude = false;
             };
         });
-        return keyFunction;
+        return valueInclude;
     }    
 }
