@@ -1,0 +1,41 @@
+<div>
+    <div>
+    Titulo: <input type="text" name="iTitle" id="iTitle">
+    </div>
+    <div>
+        Descripcion: <input type="text" name="iDescription" id="iDescription">
+    </div>
+    <div>
+        Code: <input type="text" name="iCode" id="iCode">
+    </div>
+    <div>
+        Precio: <input type="text" name="iPrice" id="iPrice">
+    </div>
+    <div>
+        Stock: <input type="text" name="iStock" id="iStock">
+    </div>
+    <div>
+        Categoria: <select name="iCategory" id="iCategory">
+                    <option value="Alimentos">Alimentos</option>
+                    <option value="Dulces">Dulces</option>
+                    <option value="Verduras">Verduras</option>
+                </select>
+    </div>
+    <button id="btnAgregar">Agregar</button>
+</div>
+
+<div style="margin-top:20px">
+    <div>
+        Ingrese el Id a Eliminar <input type="text" name="idproduct" id="idproduct">
+    </div>
+    <button id="btnEliminar">Eliminar</button>    
+</div>
+
+<div>
+    <p id="log"/>    
+</div>
+<script src="/socket.io/socket.io.js"></script>    
+<script src="/js/realTimeProducts.js"></script>
+
+
+
