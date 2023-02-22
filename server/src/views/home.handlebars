@@ -1,0 +1,34 @@
+<h2>Lista de productos</h2>
+{{#if products.[0]}}    
+    <table class="table table-sm table-hover">
+        <caption>Lista total de productos</caption>
+        <thead>
+            <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">Titulo</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Code</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Stock</th>                
+                <th scope="col">Categoria</th>
+                <th scope="col">Thumbnail</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{#each products}}
+            <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.stock}}</td>                
+                <td>{{this.category}}</td>
+                <td>{{this.thumbnail}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>            
+{{else}}
+<h2>No hay productos en la lista</h2>
+{{/if}}

@@ -56,7 +56,7 @@ export default class ProductManager{
     async getProductById(id) {        
         this._products = await this._persistenceManager.fncReadFromPersistence(this._path,this._file_name);
 
-        let rpta = new Product('','',0,'','',0);        
+        let rpta = new Product('','','',0,'',0,'','');        
         let productPosition = this._products.findIndex(x => x.id == id);
         console.log(`[SYSTEM] Posición de la búsqueda: ${productPosition}`);
         if (productPosition >= 0) {
