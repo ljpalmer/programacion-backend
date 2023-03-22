@@ -1,102 +1,75 @@
 import { Router } from "express";
-import productManager from '../class/product/ProductManager.js';
-import persistenceManager from '../class/PersistenceManager.js';
 import product from '../class/product/Product.js';
+import { productsModel } from '../dao/models/products.model.js'
 
 const PRODUCT = Router();
-const FILE_NAME = "productos.json";
-
-let objProductManager = new productManager('json', new persistenceManager(),FILE_NAME);
 
 PRODUCT.get('/', async (request, response) => {
-    let responseEndPoint = {
-        Data : [],
-        Success : true,
-        WithLimit : false
-    };    
+    const { page = 1, limit = 10, sort, category, stock } = request.query;
 
-    let limit = request.query.limit;
-    let products = await objProductManager.getProducts();    
-    responseEndPoint.Data = products;
+    let responseEndPoint = {
+        payload : [],
+        totalPages : null,
+        prevPage : null,
+        nextPage: null,
+        page: null,
+        hasPrevPage : null,
+        hasNextPage : null,
+        prevLink : null,
+        nextLink : null    
+    };    
+    // const limit = request.query.limit;
+    // const page = request.query.page;
+    var limitePaginate  = 0 ;
+    var nroPage  = 0 ;
+    if(limit){
+        limitePaginate = parseInt(limit);
+    }else{
+        limitePaginate = 10;
+    }
+    if(page){
+        nroPage = parseInt(page);
+    }else{
+        nroPage = 1;
+    }
+    const query = {};
+    if(category){
+        query.category = category;
+    }
+    if(stock){
+        query.stock = { $gt: stock }; // o 0
+    }
+    // Sort by name in ascending order
+    const options = {
+        page: nroPage,
+        limit: limitePaginate,                
+    };
+    if(sort){
+        if(sort == "desc" || sort == "asc"){
+            options.sort  = {price: sort};
+        }//Caso contrario no vale        
+    }
+ 
+    var collection = await productsModel.paginate(query, options);
+    
     try {
-        if(limit) {      
-            responseEndPoint.Data = products.slice(0, limit);
-            responseEndPoint.WithLimit = true;
-        }else{
-            responseEndPoint.Data = products;  
-        }
+            responseEndPoint.payload = collection.docs;
+            responseEndPoint.totalPages = collection.totalPages;
+            responseEndPoint.prevPage = collection.prevPage;
+            responseEndPoint.nextPage = collection.nextPage;
+            responseEndPoint.page = collection.page;
+            responseEndPoint.hasPrevPage = collection.hasPrevPage;
+            responseEndPoint.hasNextPage = collection.hasNextPage;
+            if(collection.hasPrevPage){
+                responseEndPoint.prevLink = "Tiene Prev";
+            }
+            if(collection.hasNextPage){
+                responseEndPoint.nextLink = "Tiene Next";
+            }
     } catch (error) {
         responseEndPoint.Exito = false;
     }
     response.send(JSON.stringify(responseEndPoint));
-});
-
-PRODUCT.get("/:pid", async (request, response) => {    
-    let responseEndPoint = {
-        Data : [],
-        Success : false,
-    };
-    let id = request.params.pid;
-    let product = await objProductManager.getProductById(id);
-    responseEndPoint.Data = product;
-    if (product.id != 0){
-        responseEndPoint.Success = true;
-    }    
-    response.send(JSON.stringify(responseEndPoint));
-});
-
-PRODUCT.post('/', async (request, response) => {
-    let itemProduct = new product(request.body.title,
-                                  request.body.description,
-                                  request.body.code,
-                                  request.body.price,
-                                  request.body.status,
-                                  request.body.stock,
-                                  request.body.category,
-                                  request.body.thumbnails
-                                  );         
-     try {        
-            itemProduct.id = await objProductManager.addProduct(itemProduct);
-            if (itemProduct.id != -1) {
-                response.send({status: "Success", message : `Producto agregado con ID: ${itemProduct.id}` });
-            }else{
-                response.status(400).send({status: "Error", message: "Producto invalido, verifique los datos de entrada."});
-            }                    
-     } catch (error) {
-        response.status(500).send({status: "Error", message: "Producto invalido, verifique los datos de entrada."});
-     }
-});
-
-PRODUCT.put("/", async (request, response) => {
-    let result = false;
-    let itemProduct = new product(        
-        request.body.title,
-        request.body.description,
-        request.body.code,
-        request.body.price,
-        request.body.status,
-        request.body.stock,
-        request.body.category,
-        request.body.thumbnails
-        );   
-    itemProduct.id = request.body.id;
-    try {
-        result = await objProductManager.updateProductById(itemProduct.id, itemProduct);    
-        response.send({status: "Success", message : `Producto actualizado con ID: ${itemProduct.id}` });
-    } catch (error) {
-        response.status(500).send({status: "Error", message: "Producto invalido, verifique los datos de entrada."});
-    }
-});
-
-
-PRODUCT.delete("/", async (request , response) => {
-    let id = request.body.id;
-    let result = await objProductManager.deleteProductById(id);
-    if (result){
-        response.send({status: "Success", message : `Producto eliminado con ID: ${id}` });
-    }else{
-        response.status(500).send({status: "Error", message: "Verifique el ID, el producto no pudo ser eliminado."});
-    }
 });
 
 export default PRODUCT;

@@ -36,7 +36,7 @@ configureSocket(HTTP_SERVER);
 
 const connectMongoDB = async () => {
     try {
-        await mongose.connect('CONNECTION_STRING_MONGODB'); //Cambiar por la cadena de conexion
+        await mongose.connect(CONNECTION_STRING_MONGODB); //Cambiar por la cadena de conexion
         console.log("Conectado con exito a MongoDB usando Mongoose");
     } catch (error) {
         console.error("No se pudo conectar a la BD usando Mongoose " + error);

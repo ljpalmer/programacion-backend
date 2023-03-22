@@ -1,0 +1,25 @@
+{{#if result.isValid}}
+<div>
+    {{#each result.docs}}
+    <div>
+        <p>Title : {{this.title}}</p>
+        <p>Description : {{this.description}}</p>
+        <p><button onclick="cargarCarrito()">Agregar a Carrito</button></p>
+    </div>
+    {{/each}}
+</div>
+<br/>
+<div>
+    {{#if result.hasPrevPage}}
+        <a href='{{result.prevLink}}'> << Anterior </a>
+    {{/if}}
+    &nbsp;
+    {{this.page}}
+    &nbsp;
+    {{#if result.hasNextPage}}
+        <a href='{{result.nextLink}}'>  Siguiente >> </a>
+    {{/if}}
+</div>
+{{else}}
+<h1>No hay productos para mostrar</h1>
+{{/if}}

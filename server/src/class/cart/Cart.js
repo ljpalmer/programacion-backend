@@ -1,6 +1,6 @@
 export default class Cart {
-    constructor(id, products){
-        this.id = id;
+    constructor(products){
+        // this._id = _id;
         this.products = products;
     }
 }
