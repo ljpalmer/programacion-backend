@@ -1,15 +1,17 @@
 import mongose from 'mongoose';
 
-const userCollection = 'usuarios';
+const collection = 'usuarios';
 
-const userSchema = new mongose.Schema({
+const schema = new mongose.Schema({
     first_name: String,
     last_name: String,
     email : {
         type: String,
-        unique: true,
-        requires: [true, "Correo es requerido"]
-    }
+        unique: true
+    },
+    age:Number,
+    password: String, //Se deja plano por el momento    
+    role : String
 });
 
-export const userModel = mongose.model(userCollection, userSchema);
+export const userModel = mongose.model(collection, schema);

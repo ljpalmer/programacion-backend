@@ -1,10 +1,8 @@
 import Router from 'express';
-import { userModel } from '../dao/models/user.model';
+import {userModel} from '../dao/models/user.model.js';
 
-
-const ruoter = Router();
-
-router.get('/', async (req, res) => {
+const USER = Router();
+USER.get('/', async (req, res) => {
     try {
         let users = await userModel.find();    //Es async
         res.send({ result:"success", payload:users});
@@ -14,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (res, req) => {
+USER.post('/', async (res, req) => {
     try {
         let {first_name, last_name, email} = req.body;
         //validar entrada
@@ -26,3 +24,22 @@ router.post('/', async (res, req) => {
         res.status(500).send({error: "No se pudo obtener usuarios con mongoose: " , message: error});
     }
 });
+
+
+USER.post('/logout', async (res, req) => {
+  req.session.destroy( error => {
+    if(error){
+
+    }
+  });    
+});
+
+USER.post('/register', async (res, req) => {
+    req.session.destroy( error => {
+      if(error){
+        
+      }
+    });    
+  });
+
+export default USER;

@@ -1,7 +1,8 @@
 {{#if result.isValid}}
-<div>
+<div>    
+    <h1>Hola {{result.usuario}} tu rol es {{result.role}}! <button onclick="fncCerrarSession()">Logout!</button> </h1>
     {{#each result.docs}}
-    <div>
+    <div>        
         <p>Title : {{this.title}}</p>
         <p>Description : {{this.description}}</p>
         <p><button onclick="cargarCarrito()">Agregar a Carrito</button></p>
@@ -23,3 +24,5 @@
 {{else}}
 <h1>No hay productos para mostrar</h1>
 {{/if}}
+
+<script src="/js/products.js"></script>
