@@ -25,18 +25,26 @@ ROUTER.get("/chat", async (req,res) => {
 });
 
 //Nuevo Desafio
-ROUTER.get("/products", async (req,res) => {    
-    let page = parseInt(req.query.page);
-    let limit = parseInt(req.query.limit);
-    if(!page) page = 1;
-    if(!limit) limit = 10;
-    
-    let result = await productsModel.paginate({}, {page, limit: limit, lean:true});
-    result.prevLink = result.hasPrevPage ? `http://localhost:9090/products?page=${result.prevPage}&limit=${result.limit}` : ``;
-    result.nextLink = result.hasNextPage ? `http://localhost:9090/products?page=${result.nextPage}&limit=${result.limit}` : ``;
-    result.isValid = !(page<=0 || page > result.totalPage);
-    console.log(result);
-    res.render("products", { result });
+ROUTER.get("/products", async (req, res) => {    
+    var usuario = req.session.user;
+    if(usuario){
+        let page = parseInt(req.query.page);
+        let limit = parseInt(req.query.limit);
+        if(!page) page = 1;
+        if(!limit) limit = 10;
+        console.log(req.session.user.name);
+        let result = await productsModel.paginate({}, {page, limit: limit, lean:true});
+        result.prevLink = result.hasPrevPage ? `http://localhost:9090/products?page=${result.prevPage}&limit=${result.limit}` : ``;
+        result.nextLink = result.hasNextPage ? `http://localhost:9090/products?page=${result.nextPage}&limit=${result.limit}` : ``;
+        result.isValid = !(page<=0 || page > result.totalPage);
+        result.usuario = req.session.user.name;
+        result.role = req.session.user.role;
+        // console.log(result);
+        res.render("products", { result });
+    }else{
+        res.redirect("users/login");
+    }
+   
 });
 
 ROUTER.get("/carts/:cid", async (req,res) => {  
