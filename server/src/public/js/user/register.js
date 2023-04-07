@@ -11,11 +11,13 @@ form.addEventListener('submit', e => {
         headers: {
             'Content-Type' : 'application/json'
         }
-    }).then(result => result.json()
-        //{
-        // if(result.status==200){
-        //     window.location.replace('/users');
-        // }
-    //}
+    }).then(result => // result.json()
+        {
+            console.log(result);
+        if(result.status==200){
+            alert("Usuario creado con exito");
+            window.location.replace('/users/login');
+        }
+    }
     ).then(json => console.log(json));
 });
