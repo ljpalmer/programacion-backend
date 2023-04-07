@@ -15,7 +15,10 @@ import mongose from 'mongoose';
 import session from 'express-session';
 import FileStore from 'session-file-store';
 import MongoStore from 'connect-mongo'
-
+//passport imports
+import passport from 'passport';
+import initializePassport  from './config/passport.config.js';
+import githubLoginViewRouter from './routes/github-login.views.router.js'
 
 const APP = express();
 
@@ -42,16 +45,22 @@ APP.use(session({
     resave: false,
     saveUninitialized: true
 }));
+//Middleware Passport:
+initializePassport();
+APP.use(passport.initialize());
+APP.use(passport.session());
 
-
+//Declare Reouters:
 APP.use('/api/product', productsRouter);
 APP.use('/api/cart', cartsRouter);
 APP.use('/api/chat', chatRouter);
 APP.use('/api/user', userRouter);
 
 APP.use("/", viewRouter);
+
 APP.use("/users", usersViewRouter);
 APP.use('/api/sessions', sessionsRouter);
+APP.use("/github", githubLoginViewRouter);
 
 configureHandlebars(APP);
 
