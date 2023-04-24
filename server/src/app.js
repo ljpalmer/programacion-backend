@@ -2,27 +2,27 @@ import express, { request } from 'express';
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import chatRouter from './routes/chat.router.js'
-import userRouter from './routes/user.router.js'
+import userRouter from './routes/users.router.js'
 import handlebars from 'express-handlebars' 
 import __dirname from './util.js'
 import viewRouter from './routes/views.router.js'
 import usersViewRouter from './routes/users.views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
+import jwtRouter from './routes/jwt.router.js'
 import configureSocket from './socket/configure-socket.js';
 import configureHandlebars from './middleware/hbs.middleware.js';
 import mongose from 'mongoose';
 // import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import FileStore from 'session-file-store';
 import MongoStore from 'connect-mongo'
 //passport imports
 import passport from 'passport';
 import initializePassport  from './config/passport.config.js';
 import githubLoginViewRouter from './routes/github-login.views.router.js'
-
+import cookieParser from 'cookie-parser'
 const APP = express();
 
-const MONGO_URL = "MONGO_URL_KEY";
+const MONGO_URL = "MONGO_CONNECTION_STRING";
 //const FILE_STORAGE = FileStore(session);
 
 APP.engine('handlebars', handlebars.engine());
@@ -31,9 +31,7 @@ APP.use(express.urlencoded({extended:true}));
 
 //Carpeta public
 APP.use(express.static(__dirname + "/public"));
-
-// APP.use(cookieParser("KeySecret"));
-
+//APP.use(cookieParser("KeySecret"));
 APP.use(session({
     //store: new FILE_STORAGE({path: "./sessions", ttl: 15, retries: 0}),
     store: MongoStore.create({
@@ -45,6 +43,8 @@ APP.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+APP.use(cookieParser("CoderS3cr3tC0d3"));
 //Middleware Passport:
 initializePassport();
 APP.use(passport.initialize());
@@ -60,6 +60,7 @@ APP.use("/", viewRouter);
 
 APP.use("/users", usersViewRouter);
 APP.use('/api/sessions', sessionsRouter);
+APP.use('/api/jwt', jwtRouter);
 APP.use("/github", githubLoginViewRouter);
 
 configureHandlebars(APP);

@@ -5,16 +5,23 @@ form.addEventListener('submit', e => {
     const data = new FormData(form);
     const obj = {};
     data.forEach((value, key) => obj[key] = value);
-    fetch('../api/sessions/login',{
-        method:'POST',
+    fetch('../api/jwt/login', {
+        method: 'POST',
         body: JSON.stringify(obj),
         headers: {
-            'Content-Type' : 'application/json'
+            'Content-Type': 'application/json'
         }
     }).then(result => {
-        console.log("Probando");
-        if(result.status==200){
-            window.location.replace('../products');
-        }
+        if (result.status == 200) {
+            result.json()
+                .then(json => {
+                    console.log(json);
+                    localStorage.setItem('authToken', json.jwt);
+                    window.location.replace('/users');
+                });
+        } else if (result.status == 401) {
+            console.log(result);
+            alert("Login Invalido revisa tus credenciales!");
+        };
     });
 });
