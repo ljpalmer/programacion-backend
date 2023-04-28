@@ -1,7 +1,24 @@
 import Router from 'express';
-import {userModel} from '../dao/models/user.model.js';
+import userModel from '../dao/models/users.model.js';
+import { authToken } from '../util.js';
 
 const USER = Router();
+
+USER.get("/:userId", authToken,
+async (req, res) =>{
+    const userId = req.params.userId;
+    try {
+        const user = await userModel.findById(userId);
+        if (!user) {
+            res.status(202).json({message: "User not found with ID: " + userId});
+        }
+        res.json(user);
+    } catch (error) {
+        console.error("Error consultando el usuario con ID: " + userId);
+    }
+});
+
+
 USER.get('/', async (req, res) => {
     try {
         let users = await userModel.find();    //Es async
@@ -15,7 +32,6 @@ USER.get('/', async (req, res) => {
 USER.post('/', async (res, req) => {
     try {
         let {first_name, last_name, email} = req.body;
-        //validar entrada
         if(!first_name || !last_name || !email) return res.status(400).send();
         let users = await userModel.create({first_name, last_name, email}); //es async, ejemplo profesor
         res.send({result: "succes", payload: users});
