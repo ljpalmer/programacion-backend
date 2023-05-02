@@ -10,5 +10,5 @@ export default function configureHandlebars(app) {
   });
   app.engine('handlebars', hbs.engine);
   app.set('views', `${__dirname}/views`);
-  app.set('view engine', 'handlebars');
+  app.set('views engine', 'handlebars');
 }

@@ -1,7 +1,7 @@
-import userModel from "../../dao/models/users.model.js";
+import userModel from "../../daos/mongo/user.mongo.js";
 
 export default class UserService {
-    constructor() { 
+    constructor() {
         console.log("Working users with Database persistence in mongodb");
     }
 
@@ -9,21 +9,19 @@ export default class UserService {
         let users = await userModel.find();
         return users.map(user=>user.toObject());
     }
+
     save = async (user) => {
-        let result = await userModel.create(user);
-        return result;
+        return userModel.create(user);
     }
 
     findByUsername = async (username) => {
-        const result = await userModel.findOne({email: username});
-        return result;
+        return await userModel.findOne({email: username});
     };
 
     update = async (filter, value) => {
-        console.log("Update student with filter and value:");
+        console.log("Update user with filter and value:");
         console.log(filter);
         console.log(value);
-        let result = await studentsModel.updateOne(filter, value);
-        return result;
+        return await userModel.updateOne(filter, value);
     }
 }

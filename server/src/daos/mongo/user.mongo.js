@@ -1,8 +1,8 @@
-import mongose from 'mongoose';
+import mongoose from 'mongoose';
 
 const collection = 'users';
 
-const schema = new mongose.Schema({
+const schema = new mongoose.Schema({
     first_name: String,
     last_name: String,
     email : {
@@ -12,7 +12,7 @@ const schema = new mongose.Schema({
     age:Number,
     password: String,
     carts: {
-        type: mongose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'carts'
       },
     role : String
@@ -22,5 +22,5 @@ schema.pre('findOne', function() {
     this.populate("carts.carts");
 });
 
-const userModel = mongose.model(collection, schema);
+const userModel = mongoose.model(collection, schema);
 export default userModel;

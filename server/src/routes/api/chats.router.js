@@ -1,5 +1,5 @@
 import express from "express";
-import { messageModel } from "../dao/models/messages.model.js";
+import { messageModel } from "../../daos/mongo/message.mongo.js";
 
 const CHAT = express.Router();
 

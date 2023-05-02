@@ -1,7 +1,8 @@
 import passport from 'passport';
-import userModel from '../dao/models/users.model.js';
+import userModel from '../daos/mongo/user.mongo.js';
 import {PRIVATE_KEY,createHash,isValidPassword} from '../util.js';
 import GitHubStrategy from 'passport-github2'
+import config from "./config.js";
 import jwtStrategy from 'passport-jwt'
 
 const JwtStrategy = jwtStrategy.Strategy;
@@ -27,8 +28,8 @@ const initializePassport = () => {
      * Done sera nuestro callback
      **/
     passport.use('github', new GitHubStrategy({
-        clientID: "CLIENT_ID_GITHUB",
-        clientSecret: "CLIENT_SECRET_GITHUB",
+        clientID: config.clientID,
+        clientSecret: config.clientSecret,
         callbackUrl: "http://localhost:9090/api/sessions/githubcallback"
     }, async (accessToken, refreshToken, profile, done) => {
         try {

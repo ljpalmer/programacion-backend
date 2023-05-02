@@ -1,14 +1,14 @@
 import Router from 'express';
-import userModel from '../dao/models/users.model.js';
-import { authToken } from '../util.js';
+import UserController from '../../controllers/api/user.controller.js'
+import { authToken } from '../../util.js';
 
 const USER = Router();
-
+const USER_CONTROLLER = UserController;
 USER.get("/:userId", authToken,
 async (req, res) =>{
     const userId = req.params.userId;
     try {
-        const user = await userModel.findById(userId);
+        const user = await USER_CONTROLLER.findById(userId);
         if (!user) {
             res.status(202).json({message: "User not found with ID: " + userId});
         }
@@ -21,7 +21,7 @@ async (req, res) =>{
 
 USER.get('/', async (req, res) => {
     try {
-        let users = await userModel.find();    //Es async
+        let users = await USER_CONTROLLER.find();    //Es async
         res.send({ result:"success", payload:users});
     } catch (error) {
         console.log("No se pudo obtener usuarios con mongoose: " + error);
@@ -33,7 +33,7 @@ USER.post('/', async (res, req) => {
     try {
         let {first_name, last_name, email} = req.body;
         if(!first_name || !last_name || !email) return res.status(400).send();
-        let users = await userModel.create({first_name, last_name, email}); //es async, ejemplo profesor
+        let users = await USER_CONTROLLER.create({first_name, last_name, email}); //es async, ejemplo profesor
         res.send({result: "succes", payload: users});
     } catch (error) {
         console.log("No se pudo obtener usuarios con mongoose: " + error);     

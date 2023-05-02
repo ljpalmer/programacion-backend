@@ -1,6 +1,6 @@
 import {Server} from 'socket.io';
-import {messageModel} from '../dao/models/messages.model.js';
-import {productsModel} from '../dao/models/products.model.js';
+import {messageModel} from '../daos/mongo/message.mongo.js';
+import {productsModel} from '../daos/mongo/product.mongo.js';
 
 import product from '../class/product/Product.js';
 import Chat from '../class/chat/chat.js';

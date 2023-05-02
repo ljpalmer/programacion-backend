@@ -1,8 +1,8 @@
 import {Router} from 'express';
-import {isValidPassword,generateJWToken,createHash} from '../util.js';
+import {isValidPassword,generateJWToken,createHash} from '../../util.js';
 import passport from 'passport';
 //Service import
-import UserService from '../services/db/users.service.js';
+import UserService from '../../services/db/user.service.js';
 
 const router = Router();
 const userService = new UserService();
