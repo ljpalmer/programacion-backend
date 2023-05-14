@@ -2,7 +2,7 @@
 export let Users;
 switch(config.persistence){
     case "MONGO":
-        const connection = mongoose.connect("mongodb+srv://lpalmerg:Probando1985@cluster0.8blfl16.mongodb.net/ecommerce");
+        const connection = mongoose.connect("MONGO_KEY");
         const {default:UsersMongo} = await import('');
         Users = UsersMongo;
         break;
