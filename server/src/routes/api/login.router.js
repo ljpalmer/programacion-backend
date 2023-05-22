@@ -28,4 +28,4 @@ router.get('/github', passport.authenticate('github',{scope: ['user:email']}));
 
 router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}), loginController.githubcallback);
 
-export default router
+export default router;

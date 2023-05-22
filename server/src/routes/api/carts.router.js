@@ -1,28 +1,29 @@
 import { Router } from "express"
 import CartsApiController from "../../controllers/api/cart.controller.js"
 import { roleUserVerify } from "../../middleware/roleVerify.js"
+import productValidationById from "../../middleware/productValidation.js";
 
 const router = Router()
 
 const cartsController = new CartsApiController();
 
-router.post('/', cartsController.createCart)
+router.post('/', cartsController.createCart);
 
-router.get('/:cid', cartsController.getCartProducts)
+router.get('/:cid', cartsController.getCartProducts);
 
-router.post('/:cid/product/:pid', roleUserVerify, cartsController.newProduct)
+router.post('/:cid/product/:pid', productValidationById, roleUserVerify, cartsController.newProduct);
 
-router.delete('/:cid/product/:pid', roleUserVerify, cartsController.deleteProduct)
+router.delete('/:cid/product/:pid', roleUserVerify, cartsController.deleteProduct);
 
-router.put('/:cid/product/:pid', cartsController.uploadProduct)
+router.put('/:cid/product/:pid', cartsController.uploadProduct);
 
-router.delete('/:cid', cartsController.deleteCartProducts)
+router.delete('/:cid', cartsController.deleteCartProducts);
 
-router.put('/:cid', cartsController.arrayProductsUpdate)
+router.put('/:cid', cartsController.arrayProductsUpdate);
 
-router.get('/:cid/purchase', cartsController.createTicket)
+router.get('/:cid/purchase', cartsController.createTicket);
 
-export default router
+export default router;
 // import Router  from "express";
 // import mongose from 'mongoose';
 // import Cart from '../../class/cart/Cart.js'

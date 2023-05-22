@@ -22,6 +22,7 @@ import githubLoginViewRouter from './routes/views/github-login.views.router.js'
 import cookieParser from 'cookie-parser'
 import MongoSingleton from "./config/mongodb-singleton.js";
 import cors from 'cors';
+import errorHandler from "./middleware/errorHandler.js";
 
 const APP = express();
 //const FILE_STORAGE = FileStore(session);
@@ -47,6 +48,7 @@ initializePassport();
 APP.use(passport.initialize());
 APP.use(passport.session());
 
+APP.use(errorHandler);
 //Declare Routers:
 APP.use('/api/product', productsRouter);
 APP.use('/api/cart', cartsRouter);
