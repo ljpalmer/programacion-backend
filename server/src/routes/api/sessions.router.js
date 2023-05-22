@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import passport from 'passport';
-import  { authToken, createHash, generateJWToken, isValidPassword } from '../../util.js'
-
+import  { authToken, generateJWToken} from '../../utils/jwt.util.js'
+//import  { createHash, isValidPassword } from '../../utils/bcrypt.jwt.util.js'
 const router = Router();
 
 router.get("/github", passport.authenticate('github', {scope: ['user:email']}), async(req, res) => {});
@@ -38,11 +38,11 @@ router.get("current", authToken, (req,res) => {
 })
 
 router.get("fail-register", (req, res) => {
-    res.status(401).send({error: "Fallo al procesar el registro"});
+    res.status(401).send({error: "Failed to process the register"});
 });
 
 router.get("/fail-login", (req, res) => {
-    res.status(401).send({error: "Fallo al procesar el login"});
+    res.status(401).send({error: "Failed to process the login"});
 });
 
 router.post("/logout", async (req, res) => {

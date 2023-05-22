@@ -1,6 +1,6 @@
 import Router from 'express';
 import UserController from '../../controllers/api/user.controller.js'
-import { authToken } from '../../util.js';
+import { authToken } from '../../utils/jwt.util.js';
 
 const USER = Router();
 const USER_CONTROLLER = UserController;

@@ -40,7 +40,7 @@ btnEliminar.addEventListener('click', event => {
 
 
 SOCKET.on('listUpdateProducts', products => {
-    console.log(products);    
+    //console.log(products);
     log.innerHTML = "";
     products.forEach( (product) => {
         log.innerHTML += "<small><b>Id: </b>"+product._id+"</small> | <small><b>Tittle: </b>"+product.title+"</small> | <small><b>Description: </b>"+product.description+"</small> | <small><b>Code: </b>"+product.code+"</small> | <small><b>Price: </b>"+product.price+"</small> | <small><b>Stock: </b>"+product.stock+"</small> | <small><b>Status: </b>"+product.status+"</small><br/>";

@@ -8,7 +8,7 @@ function fncCerrarSession(){
                 'Content-Type' : 'application/json'
             }
         }).then(result => {
-            console.log("Probando");
+            //console.log("Probando");
             if(result.status==200){
                 window.location.replace('users/login');
             }

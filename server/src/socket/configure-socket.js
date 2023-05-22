@@ -16,7 +16,7 @@ export default function configureSocket(httpServer) {
             await data.save();
 
             let messages = await messageModel.find();
-            console.log({messages});
+            //console.log({messages});
             io.emit('messageLogs', messages);
 
         });
@@ -49,7 +49,7 @@ export default function configureSocket(httpServer) {
                 socket.thumbnails
             );
             try {
-                console.log(itemProduct);
+                //console.log(itemProduct);
 
                 var data = new productsModel(itemProduct);
                 await data.save();
@@ -64,11 +64,11 @@ export default function configureSocket(httpServer) {
         });
 
         socket.on("deleteProduct", async (socket) => {
-            console.log(socket);
+            //console.log(socket);
             let id = socket.idproduct;
 
             const result = await productsModel.deleteOne({_id: id});
-            console.log(result);
+            //console.log(result);
             let products = await productsModel.find();
             io.emit('listUpdateProducts', products);
         });

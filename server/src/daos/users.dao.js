@@ -1,8 +1,6 @@
-import userModel from '../daos/mongo/user.mongo.js';
+import UserModel from '../daos/mongo/user.mongo.js';
 
-const UserModel = userModel();
-
-class UsersDAO {
+export default class UsersDAO {
     async getAllUsers() {
         return UserModel.find();
     }
@@ -11,6 +9,9 @@ class UsersDAO {
         return UserModel.findById(userId);
     }
 
+    async findByUsername(email) {
+        return UserModel.findOne({ email: email.toString() });
+    }
     async createUser(userData) {
         const newUser = new UserModel(userData);
         return newUser.save();
@@ -25,4 +26,4 @@ class UsersDAO {
     }
 }
 
-module.exports = UsersDAO;
+//module.exports = UsersDAO;

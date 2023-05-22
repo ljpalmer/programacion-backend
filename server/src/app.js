@@ -2,11 +2,12 @@ import express, { request } from 'express';
 import productsRouter from './routes/api/products.router.js'
 import cartsRouter from './routes/api/carts.router.js'
 import chatRouter from './routes/api/chats.router.js'
-import userRouter from './routes/api/users.router.js'
+import loginRouter from './routes/api/login.router.js'
 import handlebars from 'express-handlebars' 
-import __dirname from './util.js'
+import __dirname from './utils/jwt.util.js'
 import viewRouter from './routes/views/views.router.js'
-import usersViewRouter from './routes/views/users.views.router.js'
+import loginViewsController from './routes/views/users.views.router.js'
+import loginController from './routes/api/login.router.js'
 import sessionsRouter from './routes/api/sessions.router.js'
 import jwtRouter from './routes/api/jwt.router.js'
 import configureSocket from './socket/configure-socket.js';
@@ -26,16 +27,14 @@ const APP = express();
 //const FILE_STORAGE = FileStore(session);
 
 APP.engine('handlebars', handlebars.engine());
+APP.set('view engine', 'handlebars');
 APP.use(express.json());
 APP.use(express.urlencoded({extended:true}));
 APP.use(cors());
 //Carpeta public
 APP.use(express.static(__dirname + "/public"));
 APP.use(session({
-    store: MongoStore.create({
-        mongoUrl: config.mongoUrl,
-        mongoOptions: {useNewUrlParser:true, useUnifiedTopology:true},
-        ttl:30
+    store: MongoStore.create({mongoUrl: config.mongoUrl
     }),
     secret: "KeySecret",
     resave: false,
@@ -52,13 +51,14 @@ APP.use(passport.session());
 APP.use('/api/product', productsRouter);
 APP.use('/api/cart', cartsRouter);
 APP.use('/api/chat', chatRouter);
-APP.use('/api/user', userRouter);
+APP.use('/api/user', loginRouter);
 
 APP.use("/", viewRouter);
 
-APP.use("/users", usersViewRouter);
+APP.use("/users", loginViewsController);
 APP.use('/api/sessions', sessionsRouter);
-APP.use('/api/jwt', jwtRouter);
+//APP.use('/api/jwt', jwtRouter);
+APP.use('/api/login', loginController);
 APP.use("/github", githubLoginViewRouter);
 
 configureHandlebars(APP);
@@ -71,7 +71,9 @@ configureSocket(HTTP_SERVER);
 
 const mongoInstance = async () => {
     try {
+        //const singleton = await MongoSingleton.getInstance();
         await MongoSingleton.getInstance();
+        ///await singleton.connectMongoDB();
     }catch (error){
         console.error(error);
     }

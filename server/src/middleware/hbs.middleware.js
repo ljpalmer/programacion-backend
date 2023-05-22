@@ -1,5 +1,5 @@
 import { create } from 'express-handlebars';
-import __dirname from '../util.js'
+import __dirname from '../utils/jwt.util.js'
 import helpers from './hbs.helpers.js';
 
 // const { __dirname } = fileDirName(import.meta);

@@ -1,10 +1,12 @@
 import UserService from '../../services/db/user.service.js'
-class UserApiController {
+
+const userService = new UserService();
+export default class UserApiController {
     async getUser(req, res) {
         const { userId } = req.params;
 
         try {
-            const user = await UserService.findById(userId);
+            const user = await userService.findById(userId);
             res.json(user);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -21,7 +23,7 @@ class UserApiController {
                 password,
             };
 
-            const user = await UserService.create(userData);
+            const user = await userService.create(userData);
             res.status(201).json(user);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -38,7 +40,7 @@ class UserApiController {
                 email,
             };
 
-            const user = await UserService.update(userId, updatedData);
+            const user = await userService.update(userId, updatedData);
             res.json(user);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -49,7 +51,7 @@ class UserApiController {
         const { userId } = req.params;
 
         try {
-            const user = await UserService.delete(userId);
+            const user = await userService.delete(userId);
             res.json(user);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -57,4 +59,4 @@ class UserApiController {
     }
 }
 
-export default UserApiController;
+//export default UserApiController;

@@ -5,20 +5,20 @@ const collection = 'users';
 const schema = new mongoose.Schema({
     first_name: String,
     last_name: String,
-    email : {
+    email: {
         type: String,
         unique: true
     },
-    age:Number,
+    age: Number,
     password: String,
     carts: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: 'carts'
-      },
-    role : String
+    },
+    role: String
 });
 
-schema.pre('findOne', function() {
+schema.pre('findOne', function () {
     this.populate("carts.carts");
 });
 

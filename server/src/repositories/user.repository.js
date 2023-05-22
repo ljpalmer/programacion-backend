@@ -1,42 +1,57 @@
-﻿class UserRepository {
-    constructor(dao) {
-        this.UsersDAO = dao;
+﻿import UsersDAO from '../daos/users.dao.js'
+import UserDTO from "../daos/dtos/user.dto.js";
+export default class UserRepository {
+    constructor() {
+        this.userDAO = new UsersDAO();
     }
-    async findById(userId) {
+    async getAllUsers(){
         try {
-            return  await this.UsersDAO.findById(userId);
+            return this.userDAO.getAllUsers();
+        } catch (error) {
+            console.error(error);
+            throw new Error('No se pudo cargar los usuarios');
+        }
+    }
+    async getUserById(userId) {
+        try {
+            return  await this.userDAO.getUserById(userId);
         } catch (error) {
             console.error(error);
             throw new Error('No se pudo encontrar al usuario');
         }
     }
-
+    async findByUsername(email){
+        try {
+            return await this.userDAO.findByUsername(email);
+            //return !!user;
+        } catch (error) {
+            console.error(error);
+            throw new Error('No se pudo encontrar al usuario');
+        }
+    }
     async create(userData) {
         try {
-            return this.UsersDAO.createUser(userData);
+            return this.userDAO.createUser(userData);
         } catch (error) {
             console.error(error);
             throw new Error('No se pudo crear el usuario');
         }
     }
-
     async update(userId, updatedData) {
         try {
-            return await this.UsersDAO.findByIdAndUpdate(userId, updatedData, {new: true});
+            return await this.userDAO.updateUser(userId, updatedData);
         } catch (error) {
             console.error(error);
             throw new Error('No se pudo actualizar el usuario');
         }
     }
-
     async delete(userId) {
         try {
-            return await this.UsersDAO.findByIdAndDelete(userId);
+            return await this.userDAO.deleteUser(userId);
         } catch (error) {
             console.error(error);
             throw new Error('No se pudo eliminar el usuario');
         }
     }
 }
-
-module.exports = new UserRepository();
+//module.exports = new UserRepository();

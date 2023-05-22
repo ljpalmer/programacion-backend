@@ -1,5 +1,6 @@
 import {Router} from 'express';
-import {isValidPassword,generateJWToken,createHash} from '../../util.js';
+import {generateJWToken} from '../../utils/jwt.util.js';
+import {isValidPassword,createHash} from '../../utils/bcrypt.util.js';
 import passport from 'passport';
 //Service import
 import UserService from '../../services/db/user.service.js';
@@ -20,10 +21,10 @@ router.post("/login", async (req, res) => {
         console.log("Usuario encontrado para login:");
         console.log(user);
         if (!user) {
-            console.warn("User doesn't exists with username: " + email);
+            console.warn("User doesn't exists with Email: " + email);
             return res.status(400).send({
                 error: "Not found",
-                message: "Usuario no encontrado con username: " + email
+                message: "Usuario no encontrado con Email: " + email
             });
         }
         if (!isValidPassword(user, password)) {
@@ -46,7 +47,7 @@ router.post("/login", async (req, res) => {
             maxAge: 120000,
             httpOnly: true
         });
-        console.log("Cookie registrado");
+        console.log("Cookie registrado?");
         res.status(200).send({
             message: "Login successful!",
             jwt: access_token
@@ -80,7 +81,7 @@ router.post("/register", async (req, res) => {
         password: createHash(password),
         role: 'user'
     };
-    const result = await userService.save(user);
+    const result = await userService.create(user);
     res.status(201).send({
         status: "success",
         message: "Usuario creado con extito con ID: " + result.id

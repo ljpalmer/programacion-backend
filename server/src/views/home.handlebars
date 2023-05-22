@@ -1,32 +1,44 @@
-<h2>Lista de productos</h2>
-{{#if products.[0]}}    
-    <table class="table table-sm table-hover">
-        <caption>Lista total de productos</caption>
-        <thead>
-            <tr>                
-                <th scope="col">Titulo</th>
-                <th scope="col">Descripcion</th>
-                <th scope="col">Code</th>
-                <th scope="col">Precio</th>
-                <th scope="col">Stock</th>                
-                <th scope="col">Categoria</th>
-                <th scope="col">Thumbnail</th>
-            </tr>
-        </thead>
-        <tbody>
-        {{#each products.[0]}}
-            <tr>                
-                <td>{{this.title}}</td>
-                <td>{{this.description}}</td>
-                <td>{{this.code}}</td>
-                <td>{{this.price}}</td>
-                <td>{{this.stock}}</td>                
-                <td>{{this.category}}</td>
-                <td>{{this.thumbnail}}</td>
-            </tr>
+<div>
+    <div class="header">
+        <h2>Bienvenido {{username}}</h2>
+
+        <form action="../users/logout" method="post">
+            <button id="logout" class="btnInverted">Cerrar sesi&oacute;n</button>
+        </form>
+    </div>
+
+    <div class="titleContainer">
+        <h2>Todos los Productos</h2>
+    </div>
+
+    <div class="productsContainer">
+        {{#each productos}}
+            <div class="card">
+<!--                <img src="/public/media/kennyProduct.png" alt="producto" height="150px">-->
+                <div class="dataContainer">
+                    <h3>{{this.title}}</h3>
+                    <div class="description">
+                        <p>{{this.description}}</p>
+                        <p>Category: {{this.category}}</p>
+                        <p>Stock: {{this.stock}}</p>
+                    </div>
+                </div>
+                <form action="../api/carts/64027d4a017df9efaa98fee8/product/{{this._id}}" method="post">
+                    <button type="submit">Agregar al carrito</button>
+                </form>
+            </div>
         {{/each}}
-        </tbody>
-    </table>            
-{{else}}
-<h2>No hay productos en la lista</h2>
-{{/if}}
+    </div>
+
+    <div class="pagination">
+        {{#if hasPrevPage}}
+            <a href="/products?page={{prevPage}}&&limit={{limit}}" class="center"><button>Anterior</button></a>
+        {{/if}}
+        <p class="page">{{page}}</p>
+        {{#if hasNextPage}}
+            <a href="/products?page={{nextPage}}&&limit={{limit}}" class="center"><button>Siguiente</button></a>
+        {{/if}}
+    </div>
+</div>
+
+<script src="/public/js/home.js"></script>
