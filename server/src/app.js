@@ -23,6 +23,9 @@ import cookieParser from 'cookie-parser'
 import MongoSingleton from "./config/mongodb-singleton.js";
 import cors from 'cors';
 import errorHandler from "./middleware/errorHandler.js";
+import mockingRouter from './routes/api/mocking.router.js'
+import loggerRouter from './routes/api/logger.router.js';
+import { addLogger } from './utils/logger.util.js';
 
 const APP = express();
 //const FILE_STORAGE = FileStore(session);
@@ -49,6 +52,7 @@ APP.use(passport.initialize());
 APP.use(passport.session());
 
 APP.use(errorHandler);
+APP.use(addLogger);
 //Declare Routers:
 APP.use('/api/product', productsRouter);
 APP.use('/api/cart', cartsRouter);
@@ -62,6 +66,9 @@ APP.use('/api/sessions', sessionsRouter);
 //APP.use('/api/jwt', jwtRouter);
 APP.use('/api/login', loginController);
 APP.use("/github", githubLoginViewRouter);
+
+APP.use('/mockingproducts', mockingRouter);
+APP.use('/loggerTest', loggerRouter);
 
 configureHandlebars(APP);
 

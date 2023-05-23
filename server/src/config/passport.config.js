@@ -67,22 +67,24 @@ const initializePassport = () => {
         {
             usernameField: 'username'
         },
-        async (username, password, done) => {
+        async (req, username, password, done) => {
+            req.logger.info('Login Passport');
             console.log('Login Passport');
             try {
                 console.log("UserName: " + username);
                 let user = await usersDAO.findByUsername(username);
+                req.logger.info(user);
                 console.log(user);
                 if (!user) {
                     console.log('User does not exist');
-                    return done(null, false)
+                    return done(null, false);
                 }
 
                 if(!isValidPassword(user, password)){
-                    console.log('Invalid input data')
-                    return done(null, false)
+                    console.log('Invalid input data');
+                    return done(null, false);
                 }
-                return done(null, user)
+                return done(null, user);
             } catch (error) {
                 console.log(error)
                 return done(error)

@@ -22,19 +22,21 @@ export default class LoginViewsController {
         try {
             console.log("Probando el registro de session");
             if (username !== config.adminName || password !== config.adminPassword) {
-                req.session.user = username
-                req.session.email = username
-                req.session.admin = false
-                req.session.usuario = true
-                console.log('Role user detected')
-                res.redirect('http://localhost:9090/products')
+                req.session.user = username;
+                req.session.email = username;
+                req.session.admin = false;
+                req.session.usuario = true;
+                req.logger.info('Role user detected');
+                console.log('Role user detected');
+                res.redirect('http://localhost:9090/products');
             } else {
-                req.session.user = username
-                req.session.email = username
-                req.session.admin = true
-                req.session.usuario = false
-                console.log('Role admin detected')
-                res.redirect('http://localhost:9090/products')
+                req.session.user = username;
+                req.session.email = username;
+                req.session.admin = true;
+                req.session.usuario = false;
+                req.logger.info('Role admin detected');
+                console.log('Role admin detected');
+                res.redirect('http://localhost:9090/products');
             }
         } catch (error) {
             console.log(error)
@@ -61,6 +63,7 @@ export default class LoginViewsController {
     }
 
     githubcallback = (req = request, res)=>{
+        req.logger.info('req: ',req.user)
         console.log('req: ',req.user)
         req.session.user = req.user.first_name
         req.session.email = req.user.email
